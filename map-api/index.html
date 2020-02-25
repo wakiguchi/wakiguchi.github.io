@@ -26,7 +26,7 @@
 
           // 前回の書き出しから3秒以上経過していたら描写
           // 毎回HTMLに書き出していると、ブラウザがフリーズするため
-          if ((syncerWatchPosition.lastTime + 3) > nowTime) {
+          if ((syncerWatchPosition.lastTime + 5) > nowTime) {
             return false;
           }
 
@@ -34,13 +34,10 @@
           syncerWatchPosition.lastTime = nowTime;
 
           // HTMLに書き出し
-          document.getElementById('result').innerHTML = '<dt>緯度</dt><dd>' + position.coords.latitude + '</dd><dt>経度</dt><dd>' + position.coords.longitude + '</dd><dt>高度</dt><dd>' + position.coords.altitude + '</dd><dt>速度</dt><dd>' + position.coords.speed + '</dd><dt>実行回数</dt><dd>' + syncerWatchPosition.count + '回</dd>';
+          //document.getElementById('result').innerHTML = '<dt>緯度</dt><dd>' + position.coords.latitude + '</dd><dt>経度</dt><dd>' + position.coords.longitude + '</dd><dt>高度</dt><dd>' + position.coords.altitude + '</dd><dt>速度</dt><dd>' + position.coords.speed + '</dd><dt>実行回数</dt><dd>' + syncerWatchPosition.count + '回</dd>';
 
           // 位置情報
           var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-
-          // ズーム情報
-          var nowZoom = map.getZoom();
 
           // Google Mapsに書き出し
           if (syncerWatchPosition.map == null) {
@@ -48,6 +45,7 @@
             syncerWatchPosition.map = new google.maps.Map(document.getElementById('map-canvas'), {
               zoom: 15,				// ズーム値
               center: latlng,		// 中心座標 [latlng]
+              zoomControl: true,
             });
 
             // マーカーの新規出力
@@ -63,7 +61,8 @@
             // マーカーの場所を変更
             syncerWatchPosition.marker.setPosition(latlng);
 
-            // マーカーの場所を変更
+            // ズームを変更
+            var nowZoom = syncerWatchPosition.map.getZoom();
             syncerWatchPosition.map.setZoom(nowZoom);
           }
         }
